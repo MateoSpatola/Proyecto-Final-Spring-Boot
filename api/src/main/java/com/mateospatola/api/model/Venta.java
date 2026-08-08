@@ -24,5 +24,13 @@ public class Venta {
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     private Cliente cliente;
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleVenta> detalles = new ArrayList<>();;
+    private List<DetalleVenta> detalles = new ArrayList<>();
+
+    public double calcularTotal() {
+        double total = 0;
+        for (DetalleVenta detalle : detalles) {
+            total += detalle.calcularSubtotal();
+        }
+        return total;
+    }
 }
