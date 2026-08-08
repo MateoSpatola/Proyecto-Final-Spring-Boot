@@ -22,4 +22,8 @@ public class DetalleVenta {
     private Producto producto;
     private Integer cantidad;
     private Double precioUnitario;
+
+    public Double calcularSubtotal() {
+        return cantidad * precioUnitario;
+    }
 }
