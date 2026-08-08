@@ -21,4 +21,10 @@ public class Producto {
     private String marca;
     private Double costo;
     private Integer stock;
+
+    private static final double MARGEN = 1.30;
+
+    public Double calcularPrecioFinal() {
+        return costo * MARGEN;
+    }
 }
