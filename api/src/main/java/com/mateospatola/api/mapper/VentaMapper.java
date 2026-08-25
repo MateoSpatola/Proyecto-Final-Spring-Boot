@@ -16,19 +16,7 @@ public class VentaMapper {
         ventaResponseDTO.setFecha(entity.getFecha());
         ventaResponseDTO.setTotal(entity.getTotal());
         ventaResponseDTO.setClienteId(entity.getCliente().getId());
-
-        List<DetalleVentaResponseDTO> detallesDTO = new ArrayList<>();
-        for (DetalleVenta detalle : entity.getDetalles()) {
-            DetalleVentaResponseDTO detalleDTO = new DetalleVentaResponseDTO();
-            detalleDTO.setId(detalle.getId());
-            detalleDTO.setVentaId(detalle.getVenta().getId());
-            detalleDTO.setProductoId(detalle.getProducto().getId());
-            detalleDTO.setCantidad(detalle.getCantidad());
-            detalleDTO.setPrecioUnitario(detalle.getPrecioUnitario());
-            detalleDTO.setSubtotal(detalle.calcularSubtotal());
-            detallesDTO.add(detalleDTO);
-        }
-        ventaResponseDTO.setDetallesDTO(detallesDTO);
+        ventaResponseDTO.setDetallesDTO(toDetalleVentaResponseDTOList(entity.getDetalles()));
         return ventaResponseDTO;
     }
 
@@ -38,6 +26,21 @@ public class VentaMapper {
             responseDTOList.add(VentaMapper.toResponseDTO(entity));
         }
         return responseDTOList;
+    }
+
+    public static List<DetalleVentaResponseDTO> toDetalleVentaResponseDTOList(List<DetalleVenta> detalles) {
+        List<DetalleVentaResponseDTO> detallesDTO = new ArrayList<>();
+        for (DetalleVenta detalle : detalles) {
+            DetalleVentaResponseDTO detalleDTO = new DetalleVentaResponseDTO();
+            detalleDTO.setId(detalle.getId());
+            detalleDTO.setVentaId(detalle.getVenta().getId());
+            detalleDTO.setProductoId(detalle.getProducto().getId());
+            detalleDTO.setCantidad(detalle.getCantidad());
+            detalleDTO.setPrecioUnitario(detalle.getPrecioUnitario());
+            detalleDTO.setSubtotal(detalle.calcularSubtotal());
+            detallesDTO.add(detalleDTO);
+        }
+        return detallesDTO;
     }
 
 }

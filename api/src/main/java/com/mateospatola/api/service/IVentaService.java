@@ -1,5 +1,6 @@
 package com.mateospatola.api.service;
 
+import com.mateospatola.api.dto.venta.DetalleVentaResponseDTO;
 import com.mateospatola.api.dto.venta.VentaRequestDTO;
 import com.mateospatola.api.dto.venta.VentaResponseDTO;
 
@@ -16,5 +17,7 @@ public interface IVentaService {
     VentaResponseDTO update(Long id, VentaRequestDTO ventaRequestDTO);
 
     void delete(Long id);
+
+    List<DetalleVentaResponseDTO> getDetallesVenta(Long id);
 
 }

@@ -96,6 +96,15 @@ public class VentaService implements IVentaService {
         ventaRepository.delete(entity);
     }
 
+    @Override
+    public List<DetalleVentaResponseDTO> getDetallesVenta(Long id) {
+        Venta entity = ventaRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Venta con el id: " + id + " no encontrada para obtener sus detalles.")
+        );
+        return VentaMapper.toDetalleVentaResponseDTOList(entity.getDetalles());
+    }
+
+
     private List<DetalleVenta> crearDetalles(Venta venta, List<DetalleVentaRequestDTO> detallesRequestDTO) {
         List<DetalleVenta> detalles = new ArrayList<>();
         for (DetalleVentaRequestDTO detalleCreateDTO : detallesRequestDTO) {

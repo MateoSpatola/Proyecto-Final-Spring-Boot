@@ -1,5 +1,6 @@
 package com.mateospatola.api.controller;
 
+import com.mateospatola.api.dto.venta.DetalleVentaResponseDTO;
 import com.mateospatola.api.dto.venta.VentaRequestDTO;
 import com.mateospatola.api.dto.venta.VentaResponseDTO;
 import com.mateospatola.api.service.IVentaService;
@@ -45,6 +46,11 @@ public class VentaController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         ventaService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/productos/{id}")
+    public ResponseEntity<List<DetalleVentaResponseDTO>> getDetallesVenta(@PathVariable Long id) {
+        return ResponseEntity.ok(ventaService.getDetallesVenta(id));
     }
 
 
