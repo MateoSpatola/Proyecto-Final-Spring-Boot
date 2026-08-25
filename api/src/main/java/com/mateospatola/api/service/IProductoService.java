@@ -17,4 +17,6 @@ public interface IProductoService {
 
     void delete(Long id);
 
+    List<ProductoResponseDTO> getLowStock();
+
 }

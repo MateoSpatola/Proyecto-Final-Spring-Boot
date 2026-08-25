@@ -48,4 +48,9 @@ public class ProductoController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/falta_stock")
+    public ResponseEntity<List<ProductoResponseDTO>> getLowStock() {
+        return ResponseEntity.ok(productoService.getLowStock());
+    }
+
 }

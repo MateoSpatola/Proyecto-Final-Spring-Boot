@@ -57,4 +57,10 @@ public class ProductoService implements IProductoService {
         productoRepository.delete(entity);
     }
 
+    @Override
+    public List<ProductoResponseDTO> getLowStock() {
+        List<Producto> entities = productoRepository.findByStockLessThan(5);
+        return ProductoMapper.toResponseDTOList(entities);
+    }
+
 }
