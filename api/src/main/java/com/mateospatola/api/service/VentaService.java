@@ -118,6 +118,24 @@ public class VentaService implements IVentaService {
         return resumen;
     }
 
+    @Override
+    public MayorVentaResponseDTO getMayorVenta() {
+        Venta entity = ventaRepository.findFirstByOrderByTotalDesc().orElseThrow(
+                () -> new NotFoundException("No existen ventas registradas.")
+        );
+        MayorVentaResponseDTO mayorVenta = new MayorVentaResponseDTO();
+        mayorVenta.setId(entity.getId());
+        mayorVenta.setTotal(entity.getTotal());
+        int cantidadProductos = 0;
+        for (DetalleVenta d : entity.getDetalles()) {
+            cantidadProductos += d.getCantidad();
+        }
+        mayorVenta.setCantidadProductos(cantidadProductos);
+        mayorVenta.setNombreCliente(entity.getCliente().getNombre());
+        mayorVenta.setApellidoCliente(entity.getCliente().getApellido());
+        return mayorVenta;
+    }
+
 
     private List<DetalleVenta> crearDetalles(Venta venta, List<DetalleVentaRequestDTO> detallesRequestDTO) {
         List<DetalleVenta> detalles = new ArrayList<>();

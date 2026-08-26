@@ -57,4 +57,9 @@ public class VentaController {
         return ResponseEntity.ok(ventaService.getResumenVentas(fecha));
     }
 
+    @GetMapping("/mayor_venta")
+    public ResponseEntity<MayorVentaResponseDTO> getMayorVenta() {
+        return ResponseEntity.ok(ventaService.getMayorVenta());
+    }
+
 }
