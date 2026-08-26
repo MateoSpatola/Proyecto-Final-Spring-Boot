@@ -1,9 +1,8 @@
 package com.mateospatola.api.service;
 
-import com.mateospatola.api.dto.venta.DetalleVentaResponseDTO;
-import com.mateospatola.api.dto.venta.VentaRequestDTO;
-import com.mateospatola.api.dto.venta.VentaResponseDTO;
+import com.mateospatola.api.dto.venta.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IVentaService {
@@ -19,5 +18,7 @@ public interface IVentaService {
     void delete(Long id);
 
     List<DetalleVentaResponseDTO> getDetallesVenta(Long id);
+
+    ResumenVentasResponseDTO getResumenVentas(LocalDate fecha);
 
 }

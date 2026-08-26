@@ -104,6 +104,20 @@ public class VentaService implements IVentaService {
         return VentaMapper.toDetalleVentaResponseDTOList(entity.getDetalles());
     }
 
+    @Override
+    public ResumenVentasResponseDTO getResumenVentas(LocalDate fecha) {
+        List<Venta> entities = ventaRepository.findByFecha(fecha);
+        ResumenVentasResponseDTO resumen = new ResumenVentasResponseDTO();
+        resumen.setFecha(fecha);
+        resumen.setCantidadVentas(entities.size());
+        Double montoTotal = 0.0;
+        for (Venta v : entities) {
+            montoTotal += v.getTotal();
+        }
+        resumen.setMontoTotal(montoTotal);
+        return resumen;
+    }
+
 
     private List<DetalleVenta> crearDetalles(Venta venta, List<DetalleVentaRequestDTO> detallesRequestDTO) {
         List<DetalleVenta> detalles = new ArrayList<>();

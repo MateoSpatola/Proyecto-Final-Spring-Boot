@@ -1,14 +1,13 @@
 package com.mateospatola.api.controller;
 
-import com.mateospatola.api.dto.venta.DetalleVentaResponseDTO;
-import com.mateospatola.api.dto.venta.VentaRequestDTO;
-import com.mateospatola.api.dto.venta.VentaResponseDTO;
+import com.mateospatola.api.dto.venta.*;
 import com.mateospatola.api.service.IVentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -53,5 +52,9 @@ public class VentaController {
         return ResponseEntity.ok(ventaService.getDetallesVenta(id));
     }
 
+    @GetMapping("/resumen/{fecha}")
+    public ResponseEntity<ResumenVentasResponseDTO> getResumenVentas(@PathVariable LocalDate fecha) {
+        return ResponseEntity.ok(ventaService.getResumenVentas(fecha));
+    }
 
 }
