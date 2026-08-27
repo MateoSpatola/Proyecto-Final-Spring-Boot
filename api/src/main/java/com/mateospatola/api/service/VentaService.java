@@ -34,7 +34,7 @@ public class VentaService implements IVentaService {
     public VentaResponseDTO create(VentaRequestDTO ventaRequestDTO) {
         Venta venta = new Venta();
         Cliente cliente = clienteRepository.findById(ventaRequestDTO.getClienteId()).orElseThrow(
-                () -> new NotFoundException("Cliente con el id: " + ventaRequestDTO.getClienteId() + " no encontrado.")
+                () -> new NotFoundException("Cliente con ID " + ventaRequestDTO.getClienteId() + " no encontrado.")
         );
         List<DetalleVenta> detalles = crearDetalles(venta, ventaRequestDTO.getDetalles());
 
@@ -57,7 +57,7 @@ public class VentaService implements IVentaService {
     @Override
     public VentaResponseDTO getById(Long id) {
         Venta entity = ventaRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Venta con el id: " + id + " no encontrada.")
+                () -> new NotFoundException("Venta con ID " + id + " no encontrada.")
         );
         return VentaMapper.toResponseDTO(entity);
     }
@@ -65,12 +65,12 @@ public class VentaService implements IVentaService {
     @Override
     public VentaResponseDTO update(Long id, VentaRequestDTO ventaRequestDTO) {
         Venta venta = ventaRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Venta con el id: " + id + " no encontrada para actualizar.")
+                () -> new NotFoundException("Venta con ID " + id + " no encontrada.")
         );
 
         if (ventaRequestDTO.getClienteId() != null) {
             Cliente cliente = clienteRepository.findById(ventaRequestDTO.getClienteId()).orElseThrow(
-                    () -> new NotFoundException("Cliente con el id: " + ventaRequestDTO.getClienteId() + " no encontrado.")
+                    () -> new NotFoundException("Venta con ID " + id + " no encontrada.")
             );
             venta.setCliente(cliente);
         }
@@ -91,7 +91,7 @@ public class VentaService implements IVentaService {
     @Override
     public void delete(Long id) {
         Venta entity = ventaRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Venta con el id: " + id + " no encontrada para eliminar.")
+                () -> new NotFoundException("Venta con ID " + id + " no encontrada.")
         );
         ventaRepository.delete(entity);
     }
@@ -99,7 +99,7 @@ public class VentaService implements IVentaService {
     @Override
     public List<DetalleVentaResponseDTO> getDetallesVenta(Long id) {
         Venta entity = ventaRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Venta con el id: " + id + " no encontrada para obtener sus detalles.")
+                () -> new NotFoundException("Venta con ID " + id + " no encontrada.")
         );
         return VentaMapper.toDetalleVentaResponseDTOList(entity.getDetalles());
     }
@@ -142,7 +142,7 @@ public class VentaService implements IVentaService {
         for (DetalleVentaRequestDTO detalleCreateDTO : detallesRequestDTO) {
             DetalleVenta detalle = new DetalleVenta();
             Producto producto = productoRepository.findById(detalleCreateDTO.getProductoId()).orElseThrow(
-                    () -> new NotFoundException("Producto con el id: " + detalleCreateDTO.getProductoId() + " no encontrado.")
+                    () -> new NotFoundException("Producto con ID " + detalleCreateDTO.getProductoId() + " no encontrado.")
             );
             detalle.setVenta(venta);
             detalle.setProducto(producto);

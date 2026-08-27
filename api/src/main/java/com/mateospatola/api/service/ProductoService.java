@@ -34,7 +34,7 @@ public class ProductoService implements IProductoService {
     @Override
     public ProductoResponseDTO getById(Long id) {
         Producto entity = productoRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Producto con el id: " + id + " no encontrado.")
+                () -> new NotFoundException("Producto con ID " + id + " no encontrado.")
         );
         return ProductoMapper.toResponseDTO(entity);
     }
@@ -42,7 +42,7 @@ public class ProductoService implements IProductoService {
     @Override
     public ProductoResponseDTO update(Long id, ProductoRequestDTO productoRequestDTO) {
         Producto entity = productoRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Producto con el id: " + id + " no encontrado para actualizar.")
+                () -> new NotFoundException("Producto con ID " + id + " no encontrado.")
         );
         ProductoMapper.updateEntity(entity, productoRequestDTO);
         Producto updated = productoRepository.save(entity);
@@ -52,7 +52,7 @@ public class ProductoService implements IProductoService {
     @Override
     public void delete(Long id) {
         Producto entity = productoRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Producto con el id: " + id + " no encontrado para eliminar.")
+                () -> new NotFoundException("Producto con ID " + id + " no encontrado.")
         );
         productoRepository.delete(entity);
     }

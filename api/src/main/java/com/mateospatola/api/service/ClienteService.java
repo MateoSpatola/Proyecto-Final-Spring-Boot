@@ -34,7 +34,7 @@ public class ClienteService implements IClienteService {
     @Override
     public ClienteResponseDTO getById(Long id) {
         Cliente entity = clienteRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Cliente con el id: " + id + " no encontrado.")
+                () -> new NotFoundException("Cliente con ID " + id + " no encontrado.")
         );
         return ClienteMapper.toResponseDTO(entity);
     }
@@ -42,7 +42,7 @@ public class ClienteService implements IClienteService {
     @Override
     public ClienteResponseDTO update(Long id, ClienteRequestDTO clienteRequestDTO) {
         Cliente entity = clienteRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Cliente con el id: " + id + " no encontrado para actualizar.")
+                () -> new NotFoundException("Cliente con ID " + id + " no encontrado.")
         );
         ClienteMapper.updateEntity(entity, clienteRequestDTO);
         Cliente updated = clienteRepository.save(entity);
@@ -53,7 +53,7 @@ public class ClienteService implements IClienteService {
     @Override
     public void delete(Long id) {
         Cliente entity = clienteRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Cliente con el id: " + id + " no encontrado para eliminar.")
+                () -> new NotFoundException("Cliente con ID " + id + " no encontrado.")
         );
         clienteRepository.delete(entity);
     }
