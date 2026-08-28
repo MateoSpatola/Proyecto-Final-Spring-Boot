@@ -69,6 +69,7 @@ public class VentaService implements IVentaService {
         return VentaMapper.toResponseDTO(entity);
     }
 
+    @Transactional
     @Override
     public VentaResponseDTO update(Long id, VentaRequestDTO ventaRequestDTO) {
         Venta venta = ventaRepository.findById(id).orElseThrow(
@@ -83,9 +84,14 @@ public class VentaService implements IVentaService {
         }
 
         if (ventaRequestDTO.getDetalles() != null) {
+            restablecerStock(venta.getDetalles());
+            verificarStock(ventaRequestDTO.getDetalles());
+
             List<DetalleVenta> nuevosDetalles = crearDetalles(venta, ventaRequestDTO.getDetalles());
             venta.getDetalles().clear();
             venta.getDetalles().addAll(nuevosDetalles);
+
+            descontarStock(venta.getDetalles());
         }
 
         venta.setFecha(LocalDate.now());
@@ -182,6 +188,13 @@ public class VentaService implements IVentaService {
         for (DetalleVenta detalle : detalles) {
             Producto producto = detalle.getProducto();
             producto.setStock(producto.getStock() - detalle.getCantidad());
+        }
+    }
+
+    private void restablecerStock(List<DetalleVenta> detalles) {
+        for (DetalleVenta detalle : detalles) {
+            Producto producto = detalle.getProducto();
+            producto.setStock(producto.getStock() + detalle.getCantidad());
         }
     }
 
