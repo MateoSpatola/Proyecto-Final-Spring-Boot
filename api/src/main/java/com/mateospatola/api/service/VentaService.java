@@ -14,6 +14,7 @@ import com.mateospatola.api.repository.ProductoRepository;
 import com.mateospatola.api.repository.VentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -32,8 +33,11 @@ public class VentaService implements IVentaService {
     private ProductoRepository productoRepository;
 
 
+    @Transactional
     @Override
     public VentaResponseDTO create(VentaRequestDTO ventaRequestDTO) {
+        verificarStock(ventaRequestDTO.getDetalles());
+
         Venta venta = new Venta();
         Cliente cliente = clienteRepository.findById(ventaRequestDTO.getClienteId()).orElseThrow(
                 () -> new NotFoundException("Cliente con ID " + ventaRequestDTO.getClienteId() + " no encontrado.")
@@ -45,6 +49,7 @@ public class VentaService implements IVentaService {
         venta.setDetalles(detalles);
         venta.setTotal(venta.calcularTotal());
 
+        descontarStock(detalles);
         Venta created = ventaRepository.save(venta);
         return VentaMapper.toResponseDTO(created);
     }
@@ -170,6 +175,13 @@ public class VentaService implements IVentaService {
         }
         if (!insufficientStockItems.isEmpty()) {
             throw new InsufficientStockException("Stock insuficiente para uno o más productos.", insufficientStockItems);
+        }
+    }
+
+    private void descontarStock(List<DetalleVenta> detalles) {
+        for (DetalleVenta detalle : detalles) {
+            Producto producto = detalle.getProducto();
+            producto.setStock(producto.getStock() - detalle.getCantidad());
         }
     }
 
