@@ -31,7 +31,7 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<ClienteResponseDTO> create(@RequestBody ClienteRequestDTO clienteRequestDTO) {
         ClienteResponseDTO created = clienteService.create(clienteRequestDTO);
-        URI location = URI.create("/clientes/" + created.getId());
+        URI location = URI.create("/api/clientes/" + created.getId());
         return ResponseEntity.created(location).body(created);
     }
 
