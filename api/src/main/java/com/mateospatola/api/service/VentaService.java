@@ -1,7 +1,9 @@
 package com.mateospatola.api.service;
 
+import com.mateospatola.api.dto.error.InsufficientStockItemDTO;
 import com.mateospatola.api.dto.venta.*;
 import com.mateospatola.api.exception.NotFoundException;
+import com.mateospatola.api.exception.InsufficientStockException;
 import com.mateospatola.api.mapper.VentaMapper;
 import com.mateospatola.api.model.Cliente;
 import com.mateospatola.api.model.DetalleVenta;
@@ -70,7 +72,7 @@ public class VentaService implements IVentaService {
 
         if (ventaRequestDTO.getClienteId() != null) {
             Cliente cliente = clienteRepository.findById(ventaRequestDTO.getClienteId()).orElseThrow(
-                    () -> new NotFoundException("Venta con ID " + id + " no encontrada.")
+                    () -> new NotFoundException("Cliente con ID " + ventaRequestDTO.getClienteId() + " no encontrado.")
             );
             venta.setCliente(cliente);
         }
@@ -151,6 +153,24 @@ public class VentaService implements IVentaService {
             detalles.add(detalle);
         }
         return detalles;
+    }
+
+    private void verificarStock(List<DetalleVentaRequestDTO> detallesRequestDTO) {
+        List<InsufficientStockItemDTO> insufficientStockItems = new ArrayList<>();
+        for (DetalleVentaRequestDTO detalleCreateDTO : detallesRequestDTO) {
+            Producto producto = productoRepository.findById(detalleCreateDTO.getProductoId()).orElseThrow(
+                    () -> new NotFoundException("Producto con ID " + detalleCreateDTO.getProductoId() + " no encontrado.")
+            );
+            if (detalleCreateDTO.getCantidad() > producto.getStock()) {
+                insufficientStockItems.add(new InsufficientStockItemDTO(producto.getId(),
+                                                                        producto.getStock(),
+                                                                        detalleCreateDTO.getCantidad())
+                );
+            }
+        }
+        if (!insufficientStockItems.isEmpty()) {
+            throw new InsufficientStockException("Stock insuficiente para uno o más productos.", insufficientStockItems);
+        }
     }
 
 }
