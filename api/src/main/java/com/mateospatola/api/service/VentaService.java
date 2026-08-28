@@ -101,11 +101,13 @@ public class VentaService implements IVentaService {
         return VentaMapper.toResponseDTO(updated);
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         Venta entity = ventaRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Venta con ID " + id + " no encontrada.")
         );
+        restablecerStock(entity.getDetalles());
         ventaRepository.delete(entity);
     }
 
